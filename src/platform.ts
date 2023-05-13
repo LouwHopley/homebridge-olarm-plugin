@@ -2,6 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { ExamplePlatformAccessory } from './platformAccessory';
+import { Olarm } from './olarm';
 
 /**
  * HomebridgePlatform
@@ -49,7 +50,12 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
    * Accessories must only be registered once, previously created accessories
    * must not be registered again to prevent "duplicate UUID" errors.
    */
-  discoverDevices() {
+  async discoverDevices() {
+
+    const olarm = new Olarm(this.config.apiKey, this.log);
+    const olarmAreas = await olarm.getAreas();
+
+    this.log.info(JSON.stringify(olarmAreas));
 
     // EXAMPLE ONLY
     // A real plugin you would discover accessories from the local network, cloud services
