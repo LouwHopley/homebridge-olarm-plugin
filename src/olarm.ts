@@ -13,6 +13,8 @@ export enum OlarmAreaState {
   Disarmed = 'disarm',
   ArmedStay = 'stay',
   NotReady = 'notready',
+  Triggered = 'activated',
+  // ALARM_TRIGGERED
 }
 
 export enum OlarmAreaAction {

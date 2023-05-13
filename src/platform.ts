@@ -12,6 +12,7 @@ import { Olarm } from './olarm';
 export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
+  public readonly olarm: Olarm;
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
@@ -22,6 +23,9 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
     this.log.debug('Finished initializing platform:', this.config.name);
+
+    // Set up olarm
+    this.olarm = new Olarm(this.config.apiKey, this.log);
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
@@ -52,8 +56,7 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
    */
   async discoverDevices() {
 
-    const olarm = new Olarm(this.config.apiKey, this.log);
-    const olarmAreas = await olarm.getAreas();
+    const olarmAreas = await this.olarm.getAreas();
 
     this.log.info(`Retrieved areas from Olarm: ${olarmAreas.map(a => a.areaName).join(', ')}`);
 
