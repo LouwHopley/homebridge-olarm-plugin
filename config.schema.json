@@ -1,0 +1,21 @@
+{
+  "pluginAlias": "OlarmHomebridgePlugin",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "My Olarm"
+      },
+      "apiKey": {
+        "type": "string",
+        "title": "API Key",
+        "description": "The API key from your Olarm account. This is obtained at https://user.olarm.co/#/api."
+      }
+    }
+  }
+}

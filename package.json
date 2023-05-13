@@ -1,8 +1,9 @@
 {
   "name": "homebridge-olarm-plugin",
+  "displayName": "OlarmHomebridgePlugin",
   "version": "0.0.1",
   "description": "A HomeKit interface for an [Olarm](https://olarm.co) alarm system.",
-  "main": "dist/accessory.js",
+  "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "rimraf ./dist && tsc",
@@ -12,6 +13,7 @@
   },
   "author": "Louw Hopley <louw@hopley.co.za>",
   "engines": {
+    "node": ">=14.18.1",
     "homebridge": ">=1.3.5"
   },
   "keywords": [
