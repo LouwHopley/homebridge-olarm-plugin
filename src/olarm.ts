@@ -1,21 +1,21 @@
 import { Logger } from 'homebridge';
 import fetch from 'node-fetch';
 
-interface OlarmArea {
+export interface OlarmArea {
   areaName: string;
   deviceId: string;
   areaNumber: number;
   areaState: OlarmAreaState;
 }
 
-enum OlarmAreaState {
+export enum OlarmAreaState {
   Armed = 'arm',
   Disarmed = 'disarm',
   ArmedStay = 'stay',
   NotReady = 'notready',
 }
 
-enum OlarmAreaAction {
+export enum OlarmAreaAction {
   Arm = 'area-arm',
   Stay = 'area-stay',
   Disarm = 'area-disarm',
