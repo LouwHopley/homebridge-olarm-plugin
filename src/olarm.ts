@@ -30,6 +30,10 @@ export class Olarm {
     this.log = log;
   }
 
+  /**
+   * Fetches all devices on the Olarm account and aggregates their areas into a single list.
+   * @returns Promise<OlarmArea[]>
+   */
   getAreas = async (): Promise<OlarmArea[]> => {
     const response = await fetch('https://apiv4.olarm.co/api/v4/devices', {
       method: 'GET',
