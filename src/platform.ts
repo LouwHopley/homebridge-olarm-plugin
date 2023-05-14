@@ -60,6 +60,8 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
 
     this.log.info(`Retrieved areas from Olarm: ${olarmAreas.map(a => a.areaName).join(', ')}`);
 
+    let accessoryUUIDsToUnregister = this.accessories.map(a => a.UUID);
+
     // loop over the discovered devices and register each one if it has not already been registered
     for (const area of olarmAreas) {
 
@@ -71,6 +73,10 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
       if (existingAccessory) {
+
+        // Remove this accessory from the list of items to remove
+        accessoryUUIDsToUnregister = accessoryUUIDsToUnregister.filter(u => u !== uuid);
+
         // the accessory already exists
         this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
 
@@ -82,10 +88,6 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
         // this is imported from `platformAccessory.ts`
         new OlarmAreaPlatformAccessory(this, existingAccessory);
 
-        // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-        // remove platform accessories when no longer present
-        // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-        // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
       } else {
         // the accessory does not yet exist, so we need to create it
         this.log.info('Adding new accessory:', area.areaName);
@@ -103,6 +105,21 @@ export class OlarmHomebridgePlatform implements DynamicPlatformPlugin {
 
         // link the accessory to your platform
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
+
+    if (accessoryUUIDsToUnregister.length > 0) {
+      this.log.info(`Some accessories need to be unregistered (${accessoryUUIDsToUnregister.length})`);
+      for (const uuid of accessoryUUIDsToUnregister) {
+        const accessoryToUnregister = this.accessories.find(accessory => accessory.UUID === uuid);
+        if (accessoryToUnregister) {
+          // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`,
+          //  eg. remove platform accessories when no longer present
+          this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessoryToUnregister]);
+          this.log.info('Removing existing accessory from cache:', accessoryToUnregister.displayName);
+        } else {
+          this.log.info('WARNING: could not find accessory with UUID', uuid);
+        }
       }
     }
   }
