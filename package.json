@@ -1,7 +1,7 @@
 {
   "name": "homebridge-olarm-plugin",
   "displayName": "OlarmHomebridgePlugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A HomeKit interface for an [Olarm](https://olarm.co) alarm system.",
   "main": "dist/index.js",
   "scripts": {
