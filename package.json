@@ -5,10 +5,8 @@
   "description": "A HomeKit interface for an [Olarm](https://olarm.co) alarm system.",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rimraf ./dist",
     "build": "rimraf ./dist && tsc",
     "prepublishOnly": "npm run build",
-    "postpublish": "npm run clean",
     "watch": "npm run build && npm link && nodemon"
   },
   "author": "Louw Hopley <louw@hopley.co.za>",
