@@ -40,7 +40,16 @@ export class OlarmAreaPlatformAccessory {
       .onGet(this.handleSecuritySystemCurrentStateGet.bind(this));
 
     // register handlers for the SecuritySystemTargetState Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.SecuritySystemTargetState)
+    // Restrict to Home, Away, Off only (hide Night)
+    const targetStateChar = this.service.getCharacteristic(this.platform.Characteristic.SecuritySystemTargetState);
+    targetStateChar.setProps({
+      validValues: [
+        this.platform.Characteristic.SecuritySystemTargetState.STAY_ARM,   // Home
+        this.platform.Characteristic.SecuritySystemTargetState.AWAY_ARM,   // Away
+        this.platform.Characteristic.SecuritySystemTargetState.DISARM,    // Off
+      ],
+    });
+    targetStateChar
       .onGet(this.handleSecuritySystemTargetStateGet.bind(this))
       .onSet(this.handleSecuritySystemTargetStateSet.bind(this));
 
@@ -75,9 +84,8 @@ export class OlarmAreaPlatformAccessory {
   convertFromOlarmAreaState = (s: OlarmAreaState): CharacteristicValue => {
     /**
      * Apple HomeKit <-> Olarm API v4 area states
-     * STAY_ARM (Home)  -> stay
+     * STAY_ARM (Home)  -> stay, sleep (Night is hidden)
      * AWAY_ARM (Away) -> arm
-     * NIGHT_ARM (Night) -> stay or sleep
      * DISARMED (Off)  -> disarm, notready
      * ALARM_TRIGGERED -> alarm, fire, emergency
      */
@@ -86,7 +94,7 @@ export class OlarmAreaPlatformAccessory {
         return this.platform.Characteristic.SecuritySystemCurrentState.AWAY_ARM;
       case OlarmAreaState.ArmedStay:
       case OlarmAreaState.ArmedSleep:
-        return this.platform.Characteristic.SecuritySystemCurrentState.NIGHT_ARM;
+        return this.platform.Characteristic.SecuritySystemCurrentState.STAY_ARM; // Home (Night hidden)
       case OlarmAreaState.Disarmed:
       case OlarmAreaState.NotReady:
       case OlarmAreaState.Countdown:

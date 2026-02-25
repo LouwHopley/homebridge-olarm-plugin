@@ -22,12 +22,11 @@ This plugin creates a HomeKit interface for an [Olarm](https://olarm.co) alarm s
 
 The plugin will automatically scan all devices on your Olarm account and pull in their areas. Each area will be created as a separate accessory.
 
-Note that HomeKit forces 4 alarm states: `Home`, `Away`, `Night` and `Off` which as of writing can't be customised. Hence, the states have been mapped to the following:
+The plugin exposes three alarm states in the Home app:
 
-- `Home` -> Armed Stay
-- `Away` -> Armed
-- `Night` -> Armed Stay
-- `Off` -> Disarmed
+- `Home` -> Armed Stay (area-stay)
+- `Away` -> Armed (area-arm)
+- `Off` -> Disarmed (area-disarm)
 
 Alarm triggered states (alarm, fire, emergency) are displayed in HomeKit when the Olarm reports them.
 
