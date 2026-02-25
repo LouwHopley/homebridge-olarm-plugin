@@ -73,33 +73,31 @@ export class OlarmAreaPlatformAccessory {
   }
 
   convertFromOlarmAreaState = (s: OlarmAreaState): CharacteristicValue => {
-
     /**
-     * APPLE  OLARM
-     * Home   <unused> -> Stay
-     * Away   Armed
-     * Night  Stay
-     * Off    Disarmed
-     * ...
+     * Apple HomeKit <-> Olarm API v4 area states
+     * STAY_ARM (Home)  -> stay
+     * AWAY_ARM (Away) -> arm
+     * NIGHT_ARM (Night) -> stay or sleep
+     * DISARMED (Off)  -> disarm, notready
+     * ALARM_TRIGGERED -> alarm, fire, emergency
      */
     switch (s) {
       case OlarmAreaState.Armed:
-        return this.platform.Characteristic.SecuritySystemCurrentState.AWAY_ARM; // Away => Armed
+        return this.platform.Characteristic.SecuritySystemCurrentState.AWAY_ARM;
       case OlarmAreaState.ArmedStay:
-        return this.platform.Characteristic.SecuritySystemCurrentState.NIGHT_ARM; // Night => Stay
+      case OlarmAreaState.ArmedSleep:
+        return this.platform.Characteristic.SecuritySystemCurrentState.NIGHT_ARM;
       case OlarmAreaState.Disarmed:
-        return this.platform.Characteristic.SecuritySystemCurrentState.DISARMED;
       case OlarmAreaState.NotReady:
+      case OlarmAreaState.Countdown:
         return this.platform.Characteristic.SecuritySystemCurrentState.DISARMED;
-      case OlarmAreaState.Triggered: // todo
+      case OlarmAreaState.Alarm:
+      case OlarmAreaState.Fire:
+      case OlarmAreaState.Emergency:
+        return this.platform.Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED;
       default:
         return this.platform.Characteristic.SecuritySystemCurrentState.DISARMED;
     }
-    // static readonly STAY_ARM = 0; // "Home"
-    // static readonly AWAY_ARM = 1; // "Away"
-    // static readonly NIGHT_ARM = 2; // "Night"
-    // static readonly DISARMED = 3; // "Off"
-    // static readonly ALARM_TRIGGERED = 4; // ?
   };
 
   convertToOlarmAreaState = (s: CharacteristicValue): OlarmAreaState => {
@@ -113,7 +111,7 @@ export class OlarmAreaPlatformAccessory {
       case this.platform.Characteristic.SecuritySystemCurrentState.DISARMED:
         return OlarmAreaState.Disarmed;
       case this.platform.Characteristic.SecuritySystemCurrentState.ALARM_TRIGGERED:
-        return OlarmAreaState.Triggered; // todo
+        return OlarmAreaState.Alarm; // Read-only; disarm is the typical user action
       default:
         return OlarmAreaState.Disarmed;
     }

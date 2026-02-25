@@ -14,7 +14,7 @@
       "apiKey": {
         "type": "string",
         "title": "API Key",
-        "description": "The API key from your Olarm account. This is obtained at https://user.olarm.co/#/api."
+        "description": "The API key from your Olarm account. This is obtained at https://user.olarm.com/#/api."
       }
     }
   }

@@ -7,7 +7,7 @@ This plugin creates a HomeKit interface for an [Olarm](https://olarm.co) alarm s
 ### Installing
 
 1. On your Homebridge device, run `npm i -g homebridge-olarm-plugin`
-2. Create an API key on Olarm ([here](https://user.olarm.co/#/api))
+2. Create an API key on Olarm ([here](https://user.olarm.com/#/api)). [API documentation](https://user.olarm.com/#/api/documentation)
 2. Set up the new platform in your Homebridge config.json
 ```
 {
@@ -24,12 +24,12 @@ The plugin will automatically scan all devices on your Olarm account and pull in
 
 Note that HomeKit forces 4 alarm states: `Home`, `Away`, `Night` and `Off` which as of writing can't be customised. Hence, the states have been mapped to the following:
 
-- `Home` -> Armed Stay (and changes to `Night` automatically)
+- `Home` -> Armed Stay
 - `Away` -> Armed
 - `Night` -> Armed Stay
-- `Off` -> Disarmed.
+- `Off` -> Disarmed
 
-Triggered / alarm activated states are not yet connected.
+Alarm triggered states (alarm, fire, emergency) are displayed in HomeKit when the Olarm reports them.
 
 ### Development
 
